@@ -1,0 +1,27 @@
+package: pyslingshot
+version: 0.1.0
+upstream:
+  name: slingshot
+  version: 2.14.0
+  source: https://github.com/kstreet13/slingshot
+algorithm_class: ordinal
+fixture:
+  path: data/fixture_coords.csv
+  labels: data/fixture_labels.csv
+  description: |
+    Y-shaped 2-D synthetic (300 cells, 5 KMeans clusters) — common stem with
+    two branches.  Generated deterministically with seed=42.
+reference_command: tests/r_reference_driver.R
+candidate_command: tests/_run_candidate.py
+outputs:
+  - name: pseudotime
+    metric: spearman
+    threshold: 0.80
+    class: ordinal
+    notes: |
+      Best per-lineage Spearman after Hungarian matching of Py lineages to
+      R lineages.  R may emit a different lineage count than Py; the gate
+      requires every R lineage to have at least one matching Py lineage with
+      Spearman >= 0.80.
+parity_runs:
+  random_seed: 42
